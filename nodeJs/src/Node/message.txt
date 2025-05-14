@@ -1,0 +1,1 @@
+This is a text write with the writeFile Method
