@@ -2,10 +2,9 @@ import { createServer } from "node:http";
 
 const server = createServer((req, response) => {
   response.statusCode = 200;
-  response.setHeader("Content-Type", "text/html");
-  response.end(
-    "<html><body><h1>Welcome To my Server with Node</h1></body></html>"
-  );
+  response.setHeader("Content-Type", "application/json");
+  const jsonBody = JSON.stringify({ location: "Mars" });
+  response.end(jsonBody);
 });
 
 server.listen(3000, () => {
