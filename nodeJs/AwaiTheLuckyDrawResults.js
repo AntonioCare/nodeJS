@@ -12,14 +12,16 @@ function luckyDraw(player) {
   });
 }
 
-luckyDraw("Joe")
-  .then((result) => {
-    console.log(result);
-    return luckyDraw("Caroline");
-  })
-  .then((result) => {
-    console.log(result);
-    return luckyDraw("Sabrina");
-  })
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
+async function getResults() {
+  try {
+    const tina = await luckyDraw("Tina");
+    const jorge = await luckyDraw("Jorge");
+    const Julien = await luckyDraw("Julien");
+    console.log(tina);
+    console.log(jorge);
+    console.log(Julien);
+  } catch (error) {
+    console.error(error);
+  }
+}
+getResults();
