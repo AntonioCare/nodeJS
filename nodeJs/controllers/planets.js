@@ -8,7 +8,8 @@ const dbSetup = async () => {
 DROP TABLE IF EXISTS planets;
 CREATE TABLE planets(
 id SERIAL NOT NULL PRIMARY KEY,
-name TEXT NOT NULL
+name TEXT NOT NULL,
+image TEXT
 );
 `);
   await db.none(`
@@ -59,16 +60,28 @@ const create = async (req, res) => {
   );
   res.status(201).json({ msg: "planet was created" });
 };
-const updateById = (req, res) => {
+const updateById = async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
-  db.none(`UPDATE planets SET name=$2 WHERE id=$1`, [id, name]);
+  await db.none(`UPDATE planets SET name=$2 WHERE id=$1`, [id, name]);
   res.status(200).send({ msg: "Planet was updated" });
 };
-const deleteById = (req, res) => {
+const deleteById = async (req, res) => {
   const { id } = req.params;
-  db.none(`DELETE FROM planets WHERE id=$1`, [id]);
+  await db.none(`DELETE FROM planets WHERE id=$1`, [id]);
   res.status(200).json({ msg: "Planet was deleted" });
 };
 
-export { getAll, getOneById, create, updateById, deleteById };
+const createImage = async (req, res) => {
+  const { id } = req.params;
+  const fileName = req.file.path;
+
+  if (fileName) {
+    await db.none(`UPDATE planets SET image=$1 WHERE id= $2`, [fileName, id]);
+    res.status(201).json({ msg: "Image uploaded successfully!" });
+  } else {
+    res.status(400).json({ msg: "Error during the upload" });
+  }
+};
+
+export { getAll, getOneById, create, updateById, deleteById, createImage };
